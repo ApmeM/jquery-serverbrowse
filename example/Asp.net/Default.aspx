@@ -20,6 +20,7 @@
                 imageUrl: '<%=ResolveUrl("~/img/browser/") %>',
                 handlerUrl: '<%=ResolveUrl("~/GetPath.aspx") %>',
                 title: 'Browse1',
+                basePath: 'C:\\'
                 width: 300,
                 height: 500
             });

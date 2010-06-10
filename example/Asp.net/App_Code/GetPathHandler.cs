@@ -18,9 +18,6 @@ namespace App_Code
         private class BrowsePath
         {
             private string _Name;
-            private string _Date;
-            private string _Icon;
-            private int _Size;
             private string _IsFolder;
             private string _IsError;
 
@@ -31,35 +28,14 @@ namespace App_Code
                 set { _Name = value; }
             }
 
-            [DataMember(Name = "date", Order = 1)]
-            public string Date
-            {
-                get { return _Date; }
-                set { _Date = value; }
-            }
-
-            [DataMember(Name = "icon", Order = 2)]
-            public string Icon
-            {
-                get { return _Icon; }
-                set { _Icon = value; }
-            }
-
-            [DataMember(Name = "size", Order = 3)]
-            public int Size
-            {
-                get { return _Size; }
-                set { _Size = value; }
-            }
-
-            [DataMember(Name = "isFolder", Order = 4)]
+            [DataMember(Name = "isFolder", Order = 1)]
             public string IsFolder
             {
                 get { return _IsFolder; }
                 set { _IsFolder = value; }
             }
 
-            [DataMember(Name = "isError", Order = 4)]
+            [DataMember(Name = "isError", Order = 2)]
             public string IsError
             {
                 get { return _IsError; }
@@ -67,7 +43,7 @@ namespace App_Code
             }
         }
 
-        private string BaseDirectory = "C:\\";
+        private string BaseDirectory = "";
 
         public void ProcessRequest(HttpContext context)
         {
