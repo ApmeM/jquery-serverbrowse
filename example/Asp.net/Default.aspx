@@ -15,12 +15,12 @@
         $(document).ready(function() {
             $('#Button1').serverBrowser({
                 onSelect: function(path) {
-                    $('#TextBox1').val('c:\\' + path);
+                    $('#TextBox1').val(path);
                 },
                 imageUrl: '<%=ResolveUrl("~/img/browser/") %>',
                 handlerUrl: '<%=ResolveUrl("~/GetPath.aspx") %>',
                 title: 'Browse1',
-                basePath: 'C:\\'
+                basePath: 'C:\\',
                 width: 300,
                 height: 500
             });
