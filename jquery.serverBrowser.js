@@ -195,7 +195,7 @@
             }
             
             function doneCancel(){
-                onCancel();
+                config.onCancel();
                 browserDlg.dialog("close");
             }
 

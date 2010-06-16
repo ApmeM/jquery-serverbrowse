@@ -90,25 +90,33 @@
                     "Ok": function() {
                         doneOk();
                     },
-                }
+                },
+                resize: function(event, ui) {
+                    alert(event.height);
+                    knownPathDiv.css({'height' : event.height - enterPathDiv.height()});
+                },
+
             });
 
 // First div on the top
 // It contains textbox field and buttons
 // User can enter any paths he want to open in this textbox and press enter
 // There is 3 buttons on the panel:
-            var enterPathDiv = $('<div></div>').addClass('ui-widget-content').text('Look in: ').appendTo(browserDlg).css({'margin': 'auto', 'padding': '5', 'text-align': 'center'});
+            var enterPathDiv = $('<div></div>').addClass('ui-widget-content').appendTo(browserDlg).css({'height': '30px', 'margin': 'auto', 'padding-top': '7px'});
+            
+            var enterButton = $('<div></div>').css({'float': 'left', 'vertical-align': 'middle', 'margin-left': '6px'}).addClass('ui-corner-all').hover(
+                function() { $(this).addClass('ui-state-hover'); },
+                function() { $(this).removeClass('ui-state-hover'); }
+            );
+
+            var enterLabel = $('<span></span>').text('Look in: ').appendTo(enterButton.clone(false).appendTo(enterPathDiv));
+
             var enterText = $('<input type="text">').keypress(function(e) {
                 if (e.keyCode == '13') {
                     e.preventDefault();
                     loadPath(enterText.val());
                 }
-            }).appendTo(enterPathDiv);
-            
-            var enterButton = $('<div></div>').css({'float': 'right'}).addClass('ui-corner-all').hover(
-                function() { $(this).addClass('ui-state-hover'); },
-                function() { $(this).removeClass('ui-state-hover'); }
-            );
+            }).appendTo(enterButton.clone(false).appendTo(enterPathDiv));
             
 //ToDo: DropDown
 /*
@@ -140,9 +148,9 @@
 // Second div is on the left
 // It contains images and texts for pre-defined paths
 // User just click on them and it will open pre-defined path
+            var knownPathDiv = $('<div></div>').addClass('ui-widget-content').css({'text-align':'center', 'padding': '10', 'float': 'left', 'width': '100px'});
             if(config.useKnownPaths){
-                var knownPathDiv = $('<div></div>').addClass('ui-widget-content').css({'text-align':'center', 'padding': '10', 'float': 'left'}).appendTo(browserDlg);
-                
+                knownPathDiv.appendTo(browserDlg);
                 $.each(config.knownPaths, function(index, path) {
                     var knownDiv = $('<div></div>').css({'margin-bottom':'10'}).hover(
                         function() { $(this).addClass('ui-state-hover'); },
@@ -195,7 +203,7 @@
             }
             
             function doneCancel(){
-                onCancel();
+                config.onCancel();
                 browserDlg.dialog("close");
             }
 
