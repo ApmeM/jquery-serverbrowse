@@ -1,7 +1,7 @@
 ﻿/*
     author: ApmeM
     date: 9-June-2010
-    version: 1.1
+    version: 1.2
 */
 
 (function($) {
@@ -33,7 +33,8 @@
 // Paths, that will be displayed on the left side of the dialog
 // This is a link to specified paths on the server
                 useKnownPaths: true,
-                knownPaths: [{text:'Desktop', image:'Desktop.png', path:'C:/Users/All Users/Desktop/'}],
+                knownPaths: [{text:'Desktop', image:'desktop.png', path:'C:/Users/All Users/Desktop'},
+                            {text:'Documents', image:'documents.png', path:'C:/Users/All Users/Documents'}],
 // Images for known extension (like 'png', 'exe', 'zip'), that will be displayed with its real names
 // Images, that is not in this list will be referenced to 'unknown.png' image
 // If list is empty - all images is known.
@@ -44,7 +45,7 @@
                 title: 'Browse',
                 resizable: true,
                 width: 400,
-                height: 500,
+                height: 400,
             };
 
             if (settings) $.extend(config, settings);
@@ -87,22 +88,21 @@
                     "Cancel": function() {
                         doneCancel();
                     },
-                    "Ok": function() {
+                    "Open": function() {
                         doneOk();
                     },
                 },
                 resize: function(event, ui) {
-                    alert(event.height);
-                    knownPathDiv.css({'height' : event.height - enterPathDiv.height()});
+                    recalculateSize();
                 },
 
             });
-
+            
 // First div on the top
 // It contains textbox field and buttons
 // User can enter any paths he want to open in this textbox and press enter
 // There is 3 buttons on the panel:
-            var enterPathDiv = $('<div></div>').addClass('ui-widget-content').appendTo(browserDlg).css({'height': '30px', 'margin': 'auto', 'padding-top': '7px'});
+            var enterPathDiv = $('<div></div>').addClass('ui-widget-content').appendTo(browserDlg).css({'height': '30px', 'width': '100%', 'padding-top': '7px'});
             
             var enterButton = $('<div></div>').css({'float': 'left', 'vertical-align': 'middle', 'margin-left': '6px'}).addClass('ui-corner-all').hover(
                 function() { $(this).addClass('ui-state-hover'); },
@@ -148,11 +148,11 @@
 // Second div is on the left
 // It contains images and texts for pre-defined paths
 // User just click on them and it will open pre-defined path
-            var knownPathDiv = $('<div></div>').addClass('ui-widget-content').css({'text-align':'center', 'padding': '10', 'float': 'left', 'width': '100px'});
+            var knownPathDiv = $('<div></div>').addClass('ui-widget-content').css({'text-align':'center', 'overflow': 'auto', 'padding': '10', 'float': 'left', 'width': '100px'});
             if(config.useKnownPaths){
                 knownPathDiv.appendTo(browserDlg);
                 $.each(config.knownPaths, function(index, path) {
-                    var knownDiv = $('<div></div>').css({'margin-bottom':'10'}).hover(
+                    var knownDiv = $('<div></div>').css({'margin':'10px'}).hover(
                         function() { $(this).addClass('ui-state-hover'); },
                         function() { $(this).removeClass('ui-state-hover'); }
                     ).click(function() {
@@ -170,13 +170,15 @@
 // User can click on path to select or deselect it
 // Doubleclick on path will open it
 // Also doubleclick on file will select this file and close dialog
-            var browserPathDiv = $('<div></div>').addClass('ui-widget-content').css({'float': 'left', 'margin': 'auto'}).appendTo(browserDlg);
+            var browserPathDiv = $('<div></div>').addClass('ui-widget-content').css({'float': 'right', 'overflow': 'auto'}).appendTo(browserDlg);
             
 // Now everything is done
 // When user will be ready - he just click on the area you select for this plugin and dialog will appear
             $(this).click(function() {
+                privateConfig.browserHistory = [];
                 loadPath(config.basePath);
                 browserDlg.dialog('open');
+                recalculateSize();
             });
 
             function doneOk(){
@@ -207,6 +209,13 @@
                 browserDlg.dialog("close");
             }
 
+            function recalculateSize(){
+                knownPathDiv.css({'height' : browserDlg.height() - enterPathDiv.outerHeight(true) - 2});
+                browserPathDiv.css({'height' : browserDlg.height() - enterPathDiv.outerHeight(true) - 2,
+                                    'width' : browserDlg.width() - knownPathDiv.outerWidth(true) - 20});
+
+            }
+
 // Service function
 // It add new element into browserPathDiv element
             function addElement(file){
@@ -224,7 +233,7 @@
                         function() { $(this).addClass('ui-state-hover'); },
                         function() { $(this).removeClass('ui-state-hover'); }
                     );
-                    var itemImage = $('<img />').css({ width: '32px', margin: '0 5px 0 0' }).appendTo(itemDiv);
+                    var itemImage = $('<img />').css({ width: '16px', margin: '0 5px 0 0' }).appendTo(itemDiv);
                     var itemText = $('<span></span>').text(file.name).appendTo(itemDiv);
                     if (file.isFolder == 'true')
                         itemImage.attr({ src: systemImageUrl() + 'folder.png' });
