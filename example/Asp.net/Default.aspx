@@ -17,12 +17,11 @@
                 onSelect: function(path) {
                     $('#TextBox1').val(path);
                 },
-                imageUrl: '<%=ResolveUrl("~/img/browser/") %>',
+ 		imageUrl: '<%=ResolveUrl("~/img/icons/") %>',
+ 		systemImageUrl: '<%=ResolveUrl("~/img/browser/") %>',
                 handlerUrl: '<%=ResolveUrl("~/GetPath.aspx") %>',
                 title: 'Browse1',
-                basePath: 'C:\\',
-                width: 300,
-                height: 500
+                basePath: 'C:',
             });
         });
         

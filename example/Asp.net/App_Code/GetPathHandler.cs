@@ -51,29 +51,31 @@ namespace App_Code
             HttpRequest request = context.Request;
             HttpServerUtility server = context.Server;
 
-            string path = request.QueryString["path"];
 
             List<BrowsePath> item;
             try
             {
+                string path = request.Params["path"];
+
                 if (string.IsNullOrEmpty(BaseDirectory + path))
                 {
                     item = (from device in Directory.GetLogicalDrives()
-                            select new BrowsePath { Name = device, IsFolder = "true" }).ToList();
+                            select new BrowsePath { Name = device.Trim(new char[]{'/', '\\'}), IsFolder = "true" }).ToList();
                 }
                 else
                 {
-                    item = (from directory in Directory.GetDirectories(BaseDirectory + path)
-                            select new BrowsePath { Name = Path.GetFileName(directory) + "\\", IsFolder = "true" }).ToList();
+                    item = (from directory in Directory.GetDirectories(BaseDirectory + path + "/")
+                            select new BrowsePath { Name = Path.GetFileName(directory), IsFolder = "true" }).ToList();
 
-                    List<BrowsePath> files = (from file in Directory.GetFiles(BaseDirectory + path, "*.*")
+                    List<BrowsePath> files = (from file in Directory.GetFiles(BaseDirectory + path + "/", "*.*")
                                               select new BrowsePath { Name = file }).ToList();
 
+                    string imagePath = server.MapPath("~/img/icons/");
                     files.ForEach(bp =>
-                                      {
-                                          CreateIco(bp.Name, server.MapPath("~/img/browser/"));
-                                          bp.Name = Path.GetFileName(bp.Name);
-                                      });
+                        {
+                            CreateIco(bp.Name, imagePath);
+                            bp.Name = Path.GetFileName(bp.Name);
+                        });
 
                     item.AddRange(files);
 
