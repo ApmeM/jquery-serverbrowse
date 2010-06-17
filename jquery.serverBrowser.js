@@ -75,7 +75,7 @@
 // Main dialog div
 // It will be converted into jQuery-ui dialog box using my configuration parameters
 // It contains 3 divs
-            var browserDlg = $('<div title="' + config.title + '"></div>').appendTo(document.body);
+            var browserDlg = $('<div title="' + config.title + '"></div>').css({'overflow': 'hidden'}).appendTo(document.body);
             browserDlg.dialog(
             {
                 autoOpen: false,
@@ -93,7 +93,7 @@
                     },
                 },
                 resize: function(event, ui) {
-                    recalculateSize();
+                    recalculateSize(event, ui);
                 },
 
             });
@@ -148,7 +148,7 @@
 // Second div is on the left
 // It contains images and texts for pre-defined paths
 // User just click on them and it will open pre-defined path
-            var knownPathDiv = $('<div></div>').addClass('ui-widget-content').css({'text-align':'center', 'overflow': 'auto', 'padding': '10', 'float': 'left', 'width': '100px'});
+            var knownPathDiv = $('<div></div>').addClass('ui-widget-content').css({'text-align':'center', 'overflow': 'auto', 'float': 'left', 'width': '100px'});
             if(config.useKnownPaths){
                 knownPathDiv.appendTo(browserDlg);
                 $.each(config.knownPaths, function(index, path) {
@@ -159,7 +159,7 @@
                         loadPath(path.path);
                     }).appendTo(knownPathDiv);
 
-                    $('<img />').attr({ src: systemImageUrl() + config.separatorPath + path.image }).css({ width: '32px', margin: '0 5px 0 0' }).appendTo(knownDiv);
+                    $('<img />').attr({ src: systemImageUrl() + config.separatorPath + path.image }).css({ width: '32px', margin: '5px 10px 5px 5px' }).appendTo(knownDiv);
                     $('<br/>').appendTo(knownDiv);
                     $('<span></span>').text(path.text).appendTo(knownDiv);
                 });
@@ -209,10 +209,10 @@
                 browserDlg.dialog("close");
             }
 
-            function recalculateSize(){
-                knownPathDiv.css({'height' : browserDlg.height() - enterPathDiv.outerHeight(true) - 2});
+            function recalculateSize(event, ui){
+                knownPathDiv.css({'height' : browserDlg.height() - enterPathDiv.outerHeight(true) - 2}); // -2 - borders
                 browserPathDiv.css({'height' : browserDlg.height() - enterPathDiv.outerHeight(true) - 2,
-                                    'width' : browserDlg.width() - knownPathDiv.outerWidth(true) - 20});
+                                    'width' : browserDlg.width() - knownPathDiv.outerWidth(true) - 4});
 
             }
 
