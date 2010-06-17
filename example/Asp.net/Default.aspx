@@ -17,6 +17,9 @@
                 onSelect: function(path) {
                     $('#TextBox1').val(path);
                 },
+                onLoad: function() {
+                    return $('#TextBox1').val();
+                },
  		imageUrl: '<%=ResolveUrl("~/img/icons/") %>',
  		systemImageUrl: '<%=ResolveUrl("~/img/browser/") %>',
                 handlerUrl: '<%=ResolveUrl("~/GetPath.aspx") %>',

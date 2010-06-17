@@ -1,7 +1,7 @@
 ﻿/*
     author: ApmeM
     date: 9-June-2010
-    version: 1.2
+    version: 1.4
 */
 
 (function($) {
@@ -16,6 +16,9 @@
                 },
                 onCancel: function() {
                 },
+		        onLoad: function() {
+		            return config.basePath;
+		        },
                 multiselect: false,
 // Image parameters
 // System images (loading.gif, unknown.png, folder.png and images from knownPaths) will be referenced to systemImageUrl
@@ -176,11 +179,57 @@
 // When user will be ready - he just click on the area you select for this plugin and dialog will appear
             $(this).click(function() {
                 privateConfig.browserHistory = [];
-                loadPath(config.basePath);
+                var startpath = removeBackPath(config.onLoad());
+                
+                startpath = startpath.split(config.separatorPath);
+                startpath.pop();
+                startpath = startpath.join(config.separatorPath);
+                
+                if(!checkBasePath(startpath)){
+                    startpath = config.basePath;
+                }
+                loadPath(startpath);
                 browserDlg.dialog('open');
                 recalculateSize();
             });
 
+// Function check if specified path is a child path of a 'config.basePath'
+// If it is not - user should see message, that path invalid, or path should be changed to valid.
+            function checkBasePath(path){
+                if(config.basePath == '')
+                    return true;
+                var confPath = config.basePath.split(config.separatorPath);
+                var curPath = path.split(config.separatorPath);
+                if(confPath.length > curPath.length)
+                    return false;
+                var result = true;
+                $.each(confPath, function(index, partConfPath) { 
+                    if(partConfPath != curPath[index]){
+                        result = false;
+                    }
+                });
+                return result;
+            }
+
+// Function remove '..' parts of the path
+// Process depend on config.separatorPath option
+// On the server side you need to check / or \ separators
+            function removeBackPath(path){
+                var confPath = config.basePath.split(config.separatorPath);
+                var curPath = path.split(config.separatorPath);
+                var newcurPath = [];
+                $.each(curPath, function(index, partCurPath) { 
+                    if(partCurPath == ".."){
+                        newcurPath.pop();
+                    }else{
+                        newcurPath.push(partCurPath);
+                    }
+                });
+                return newcurPath.join(config.separatorPath);
+            }
+
+// This function will be called when user click 'Open' 
+// It check if any path is selected, and call config.onSelect function with path list
             function doneOk(){
                 var newCurPath = [];
                 $.each(privateConfig.selectedItems, function(index, item) {
@@ -204,20 +253,27 @@
                 browserDlg.dialog("close");
             }
             
+// This function will be called when user click 'Cancel'
+// ToDo: need to add this function on header 'X' button.
+// It call config.onCancel function before closing dialog
             function doneCancel(){
                 config.onCancel();
                 browserDlg.dialog("close");
             }
-
+            
+// Function recalculate and set new width and height for left and right div elements
+// height have '-2' because of the borders
+// width have '-4' because of a border an 2 pixels space between divs
             function recalculateSize(event, ui){
-                knownPathDiv.css({'height' : browserDlg.height() - enterPathDiv.outerHeight(true) - 2}); // -2 - borders
+                knownPathDiv.css({'height' : browserDlg.height() - enterPathDiv.outerHeight(true) - 2});
                 browserPathDiv.css({'height' : browserDlg.height() - enterPathDiv.outerHeight(true) - 2,
                                     'width' : browserDlg.width() - knownPathDiv.outerWidth(true) - 4});
 
             }
 
-// Service function
-// It add new element into browserPathDiv element
+// Function adds new element into browserPathDiv element depends on file parameters
+// If file.isError is set, error message will be displayed instead of clickable area
+// Clickable div contain image from extension and text from file parameter
             function addElement(file){
                 var itemDiv = $('<div></div>').css({ margin: '2px' }).appendTo(browserPathDiv);
                 if(file.isError == 'true')
@@ -279,30 +335,15 @@
 // When user enter path manually, select it from pre-defined path, or doubleclick in browser this function will call
 // It send a request on the server to retrieve child directories and files of the specified path
 // If path is not under 'config.basePath', alert will be shown and nothing will be opened
+// ToDo: need to check if config.basePath is empty. Do not need to add first separator, add ability to 'up' when there is no separator at the beginning.
             function loadPath(path) {
-                var confPath = config.basePath.split(config.separatorPath);
-                var curPath = path.split(config.separatorPath);
                 privateConfig.selectedItems = [];
                 
                 // First we need to remove all '..' parts of the path
-                var newcurPath = [];
-                $.each(curPath, function(index, partCurPath) { 
-                    if(partCurPath == ".."){
-                        newcurPath.pop();
-                    }else{
-                        newcurPath.push(partCurPath);
-                    }
-                });
-                path = newcurPath.join(config.separatorPath);
+                path = removeBackPath(path);
                 
                 // Then we need to check, if path based on 'config.basePath'
-                var isValid = true;
-                $.each(confPath, function(index, partConfPath) { 
-                    if(partConfPath != newcurPath[index]){
-                        isValid = false;
-                    }
-                });
-                if(!isValid) {
+                if(!checkBasePath(path)) {
                     alert('Path should be based from ' + config.basePath);
                     return;
                 }
@@ -310,9 +351,10 @@
                 // Then we can put this path into history
                 privateConfig.browserHistory.push(path);
                 
-                // And show it to user
+                // Show it to user
                 enterText.val(path);
                 
+                //And start loading
                 var XHRRequest;
 
                 if (XHRRequest)
