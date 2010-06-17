@@ -16,9 +16,9 @@
                 },
                 onCancel: function() {
                 },
-		        onLoad: function() {
-		            return config.basePath;
-		        },
+                onLoad: function() {
+                    return config.basePath;
+                },
                 multiselect: false,
 // Image parameters
 // System images (loading.gif, unknown.png, folder.png and images from knownPaths) will be referenced to systemImageUrl
