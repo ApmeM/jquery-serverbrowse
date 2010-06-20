@@ -49,6 +49,11 @@
                 resizable: true,
                 width: 400,
                 height: 400,
+
+// Administrative parameters used to 
+// help programmer or system administrator check the latest version of the product
+                checkPluginVersion: false, // ToDo
+                requestMethod: 'POST',
             };
 
             if (settings) $.extend(config, settings);
@@ -98,7 +103,6 @@
                 resize: function(event, ui) {
                     recalculateSize(event, ui);
                 },
-
             });
             
 // First div on the top
@@ -362,7 +366,7 @@
 
                 XHRRequest = $.ajax({
                     url: config.handlerUrl,
-                    type: 'POST',
+                    type: config.requestMethod,
                     data: {
                         action: 'browse',
                         path: path,

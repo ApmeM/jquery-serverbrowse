@@ -20,8 +20,8 @@
                 onLoad: function() {
                     return $('#TextBox1').val();
                 },
- 		imageUrl: '<%=ResolveUrl("~/img/icons/") %>',
- 		systemImageUrl: '<%=ResolveUrl("~/img/browser/") %>',
+                imageUrl: '<%=ResolveUrl("~/img/icons/") %>',
+                systemImageUrl: '<%=ResolveUrl("~/img/browser/") %>',
                 handlerUrl: '<%=ResolveUrl("~/GetPath.aspx") %>',
                 title: 'Browse1',
                 basePath: 'C:',
