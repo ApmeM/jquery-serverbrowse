@@ -14,8 +14,6 @@
                 onSelect: function(file) {
                     alert('You select: ' + file);
                 },
-                onCancel: function() {
-                },
                 onLoad: function() {
                     return config.basePath;
                 },
@@ -46,9 +44,8 @@
                 handlerUrl: 'browserDlg.txt',
 // JQuery-ui dialog settings
                 title: 'Browse',
-                resizable: true,
-                width: 400,
-                height: 400,
+                width: 300,
+                position: ['center', 'top'],
 
 // Administrative parameters used to 
 // help programmer or system administrator check the latest version of the product
@@ -57,6 +54,26 @@
             };
 
             if (settings) $.extend(config, settings);
+// Required configuration elements
+// We need to set some configuration elements without user
+// For example there should be 2 buttons on the bottom, 
+// And dialog should be opened after button is pressed, not when it created
+// Also we need to know about dialog resizing
+            $.extend(config, {
+                autoOpen: false,
+                modal: true,
+                buttons: {
+                    "Cancel": function() {
+                        browserDlg.dialog("close");
+                    },
+                    "Open": function() {
+                        doneOk();
+                    },
+                },
+                resize: function(event, ui) {
+                    recalculateSize(event, ui);
+                },
+            });
             
             function systemImageUrl()
             {
@@ -84,26 +101,7 @@
 // It will be converted into jQuery-ui dialog box using my configuration parameters
 // It contains 3 divs
             var browserDlg = $('<div title="' + config.title + '"></div>').css({'overflow': 'hidden'}).appendTo(document.body);
-            browserDlg.dialog(
-            {
-                autoOpen: false,
-                modal: true,
-                position: ['center', 'top'],
-                resizable: config.resizable,
-                width: config.width,
-                height: config.height,
-                buttons: {
-                    "Cancel": function() {
-                        doneCancel();
-                    },
-                    "Open": function() {
-                        doneOk();
-                    },
-                },
-                resize: function(event, ui) {
-                    recalculateSize(event, ui);
-                },
-            });
+            browserDlg.dialog(config);
             
 // First div on the top
 // It contains textbox field and buttons
@@ -254,14 +252,6 @@
                         return;
                     }
                 }
-                browserDlg.dialog("close");
-            }
-            
-// This function will be called when user click 'Cancel'
-// ToDo: need to add this function on header 'X' button.
-// It call config.onCancel function before closing dialog
-            function doneCancel(){
-                config.onCancel();
                 browserDlg.dialog("close");
             }
             
