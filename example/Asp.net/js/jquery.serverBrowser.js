@@ -1,7 +1,8 @@
 ﻿/*
-    author: ApmeM
+    author: ApmeM (artem.votincev@gmail.com)
     date: 9-June-2010
     version: 1.4
+    download: http://code.google.com/p/jq-serverbrowse/
 */
 
 (function($) {
@@ -45,11 +46,11 @@
 // JQuery-ui dialog settings
                 title: 'Browse',
                 width: 300,
+                height: 300,
                 position: ['center', 'top'],
 
-// Administrative parameters used to 
-// help programmer or system administrator check the latest version of the product
-                checkPluginVersion: false, // ToDo
+// Administrative parameters used to
+// help programmer or system administrator
                 requestMethod: 'POST',
             };
 
@@ -123,12 +124,6 @@
                 }
             }).appendTo(enterButton.clone(false).appendTo(enterPathDiv));
             
-//ToDo: DropDown
-/*
-            var enterDropdown = $('<div></div>').addClass('ui-icon ui-icon-carat-1-s').click(function(){
-                alert('not implemented yet');
-            }).appendTo(enterButton.clone(true).appendTo(enterPathDiv));
-*/
 
 // Back button. 
 // When user click on it, 2 last elements of the history pop from the list, and reload second of them.
@@ -238,8 +233,7 @@
                     newCurPath.push($.data(item, 'path'));
                 });
                 if(newCurPath.length == 0) {
-                    alert('Please select path');
-                    return;
+                    newCurPath.push(privateConfig.browserHistory.pop());
                 }
                 
                 if(config.multiselect)
@@ -262,7 +256,6 @@
                 knownPathDiv.css({'height' : browserDlg.height() - enterPathDiv.outerHeight(true) - 2});
                 browserPathDiv.css({'height' : browserDlg.height() - enterPathDiv.outerHeight(true) - 2,
                                     'width' : browserDlg.width() - knownPathDiv.outerWidth(true) - 4});
-
             }
 
 // Function adds new element into browserPathDiv element depends on file parameters
@@ -310,7 +303,6 @@
                             });
                             privateConfig.selectedItems = newCurPath;
                         }
-
                         $(this).toggleClass('ui-state-active');
                     });
 
@@ -329,7 +321,6 @@
 // When user enter path manually, select it from pre-defined path, or doubleclick in browser this function will call
 // It send a request on the server to retrieve child directories and files of the specified path
 // If path is not under 'config.basePath', alert will be shown and nothing will be opened
-// ToDo: need to check if config.basePath is empty. Do not need to add first separator, add ability to 'up' when there is no separator at the beginning.
             function loadPath(path) {
                 privateConfig.selectedItems = [];
                 
@@ -348,13 +339,8 @@
                 // Show it to user
                 enterText.val(path);
                 
-                //And start loading
-                var XHRRequest;
-
-                if (XHRRequest)
-                    XHRRequest.abort();
-
-                XHRRequest = $.ajax({
+                // And load
+                $.ajax({
                     url: config.handlerUrl,
                     type: config.requestMethod,
                     data: {
