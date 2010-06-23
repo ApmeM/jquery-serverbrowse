@@ -18,8 +18,8 @@ namespace App_Code
         private class BrowsePath
         {
             private string _Name;
-            private string _IsFolder;
-            private string _IsError;
+            private bool _IsFolder;
+            private bool _IsError;
 
             [DataMember(Name = "name", Order = 0)]
             public string Name
@@ -29,14 +29,14 @@ namespace App_Code
             }
 
             [DataMember(Name = "isFolder", Order = 1)]
-            public string IsFolder
+            public bool IsFolder
             {
                 get { return _IsFolder; }
                 set { _IsFolder = value; }
             }
 
             [DataMember(Name = "isError", Order = 2)]
-            public string IsError
+            public bool IsError
             {
                 get { return _IsError; }
                 set { _IsError = value; }
@@ -60,12 +60,12 @@ namespace App_Code
                 if (string.IsNullOrEmpty(BaseDirectory + path))
                 {
                     item = (from device in Directory.GetLogicalDrives()
-                            select new BrowsePath { Name = device.Trim(new char[]{'/', '\\'}), IsFolder = "true" }).ToList();
+                            select new BrowsePath { Name = device.Trim(new char[]{'/', '\\'}), IsFolder = true }).ToList();
                 }
                 else
                 {
                     item = (from directory in Directory.GetDirectories(BaseDirectory + path + "/")
-                            select new BrowsePath { Name = Path.GetFileName(directory), IsFolder = "true" }).ToList();
+                            select new BrowsePath { Name = Path.GetFileName(directory), IsFolder = true }).ToList();
 
                     List<BrowsePath> files = (from file in Directory.GetFiles(BaseDirectory + path + "/", "*.*")
                                               select new BrowsePath { Name = file }).ToList();
@@ -84,7 +84,7 @@ namespace App_Code
             catch (Exception ex)
             {
                 item = new List<BrowsePath>();
-                item.Add(new BrowsePath { Name = ex.Message, IsError = "true" });
+                item.Add(new BrowsePath { Name = ex.Message, IsError = true });
             }
 
             response.Clear();

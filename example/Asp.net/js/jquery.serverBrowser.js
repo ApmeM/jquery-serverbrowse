@@ -263,7 +263,7 @@
 // Clickable div contain image from extension and text from file parameter
             function addElement(file){
                 var itemDiv = $('<div></div>').css({ margin: '2px' }).appendTo(browserPathDiv);
-                if(file.isError == 'true')
+                if(file.isError)
                 {
                     itemDiv.addClass('ui-state-error ui-corner-all').css({padding: '0pt 0.7em'});
                     var p = $('<p></p>').appendTo(itemDiv);
@@ -278,7 +278,7 @@
                     );
                     var itemImage = $('<img />').css({ width: '16px', margin: '0 5px 0 0' }).appendTo(itemDiv);
                     var itemText = $('<span></span>').text(file.name).appendTo(itemDiv);
-                    if (file.isFolder == 'true')
+                    if (file.isFolder)
                         itemImage.attr({ src: systemImageUrl() + 'folder.png' });
                     else {
                         ext = file.name.split('.').pop();
@@ -307,7 +307,7 @@
                     });
 
                     itemDiv.unbind('dblclick').bind('dblclick', function(e) {
-                        if (file.isFolder == 'true'){
+                        if (file.isFolder){
                             loadPath(fullPath);
                         } else {
                             privateConfig.selectedItems = [itemDiv];
@@ -355,7 +355,7 @@
                     success: function(files) {
                         browserPathDiv.empty().css({ 'text-align': 'left' });
                         if(path != config.basePath && config.showUpInList){
-                            addElement({name: '..', isFolder: 'true', isError: 'false', path: path});
+                            addElement({name: '..', isFolder: true, isError: false, path: path});
                         }
                         $.each(files, function(index, file) {
                             addElement($.extend(file, {path: path}));

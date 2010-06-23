@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>jq-serverBrowser example</title>
@@ -17,12 +17,14 @@
                 onLoad: function() {
                     return $('#TextBox1').val();
                 },
-        imageUrl: 'img/icons/',
-        systemImageUrl: 'img/browser/',
-                handlerUrl: 'getpath.txt',
+                knownExt: ['exe', 'js', 'txt'],
+                knownPaths: [{text:'Desktop', image:'desktop.png', path:'/home'}],
+                imageUrl: 'img/icons/',
+                systemImageUrl: 'img/browser/',
+                handlerUrl: 'getpath.php',
                 title: 'Browse1',
                 basePath: '',
-                requestMethod: 'GET',
+                requestMethod: 'POST',
             });
         });
         

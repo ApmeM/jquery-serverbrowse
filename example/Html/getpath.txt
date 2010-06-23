@@ -1,7 +1,7 @@
 [
-{"name":"folder","isFolder":"true","isError":null},
-{"name":"trunk","isFolder":"true","isError":null},
-{"name":"example.txt","isFolder":null,"isError":null},
-{"name":"img.exe","isFolder":null,"isError":null},
-{"name":"jquery.serverBrowser.js","isFolder":null,"isError":null}
+{"name":"folder","isFolder":true,"isError":false},
+{"name":"trunk","isFolder":true,"isError":false},
+{"name":"example.txt","isFolder":false,"isError":false},
+{"name":"img.exe","isFolder":false,"isError":false},
+{"name":"jquery.serverBrowser.js","isFolder":false,"isError":false}
 ]
