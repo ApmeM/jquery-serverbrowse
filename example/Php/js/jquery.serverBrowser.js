@@ -30,7 +30,7 @@
 // Base path, that links should start from.
 // If opened path is not under this path, alert will be shown and nothing will be opened
 // Path separator, that will be used to split specified paths and join paths to a string
-                basePath: '',
+                basePath: 'C:',
                 separatorPath: '/',
 // Paths, that will be displayed on the left side of the dialog
 // This is a link to specified paths on the server
