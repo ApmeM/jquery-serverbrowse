@@ -3,6 +3,7 @@
     date: 16-Jul-2011
     version: 1.6
     download: http://code.google.com/p/jq-serverbrowse/
+    copyiright (c) 2010 Artem Votincev (apmem.org)
 */
 
 (function($) {
