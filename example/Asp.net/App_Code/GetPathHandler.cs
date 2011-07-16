@@ -1,49 +1,42 @@
-using System.Drawing;
-using System.Linq;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Web;
-using System;
-
 namespace App_Code
 {
-    /// <summary>
-    /// Summary description for GetVersionHistoryHandler.
-    /// </summary>
+    #region Using Directives
+
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.IO;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Json;
+    using System.Web;
+
+    #endregion
+
     public class GetPathHandler : IHttpHandler
     {
-        [DataContract]
-        private class BrowsePath
+        #region Constants and Fields
+
+        private readonly string baseDirectory = string.Empty;
+
+        #endregion
+
+        #region Properties
+
+        public bool IsReusable
         {
-            private string _Name;
-            private bool _IsFolder;
-            private bool _IsError;
-
-            [DataMember(Name = "name", Order = 0)]
-            public string Name
+            get
             {
-                get { return _Name; }
-                set { _Name = value; }
-            }
-
-            [DataMember(Name = "isFolder", Order = 1)]
-            public bool IsFolder
-            {
-                get { return _IsFolder; }
-                set { _IsFolder = value; }
-            }
-
-            [DataMember(Name = "isError", Order = 2)]
-            public bool IsError
-            {
-                get { return _IsError; }
-                set { _IsError = value; }
+                return true;
             }
         }
 
-        private string BaseDirectory = "";
+        #endregion
+
+        #region Implemented Interfaces
+
+        #region IHttpHandler
 
         public void ProcessRequest(HttpContext context)
         {
@@ -51,34 +44,34 @@ namespace App_Code
             HttpRequest request = context.Request;
             HttpServerUtility server = context.Server;
 
-
             List<BrowsePath> item;
             try
             {
                 string path = request.Params["path"];
 
-                if (string.IsNullOrEmpty(BaseDirectory + path))
+                if (string.IsNullOrEmpty(this.baseDirectory + path))
                 {
                     item = (from device in Directory.GetLogicalDrives()
-                            select new BrowsePath { Name = device.Trim(new char[]{'/', '\\'}), IsFolder = true }).ToList();
+                            select new BrowsePath { Name = device.Trim(new[] { '/', '\\' }), IsFolder = true }).ToList();
                 }
                 else
                 {
-                    item = (from directory in Directory.GetDirectories(BaseDirectory + path + "/")
+                    item = (from directory in Directory.GetDirectories(this.baseDirectory + path + "/")
                             select new BrowsePath { Name = Path.GetFileName(directory), IsFolder = true }).ToList();
 
-                    List<BrowsePath> files = (from file in Directory.GetFiles(BaseDirectory + path + "/", "*.*")
-                                              select new BrowsePath { Name = file }).ToList();
+                    List<BrowsePath> files =
+                        (from file in Directory.GetFiles(this.baseDirectory + path + "/", "*.*")
+                         select new BrowsePath { Name = file }).ToList();
 
                     string imagePath = server.MapPath("~/img/icons/");
-                    files.ForEach(bp =>
-                        {
-                            CreateIco(bp.Name, imagePath);
-                            bp.Name = Path.GetFileName(bp.Name);
-                        });
+                    files.ForEach(
+                        bp =>
+                            {
+                                CreateIco(bp.Name, imagePath);
+                                bp.Name = Path.GetFileName(bp.Name);
+                            });
 
                     item.AddRange(files);
-
                 }
             }
             catch (Exception ex)
@@ -96,30 +89,58 @@ namespace App_Code
             response.End();
         }
 
-        public bool IsReusable
-        {
-            get { return true; }
-        }
+        #endregion
+
+        #endregion
+
+        #region Methods
 
         private static void CreateIco(string file, string iconDirect)
         {
             if (File.Exists(file))
             {
                 string ext = Path.GetExtension(file);
-                if (ext.Length > 0)
-                    ext = ext.Substring(1);
-                else
+                if (string.IsNullOrEmpty(ext))
+                {
                     ext = "none";
+                }
+                else
+                {
+                    ext = ext.Substring(1);
+                }
+
                 string iconame = iconDirect + ext + ".png";
                 if (!File.Exists(iconame))
                 {
                     using (FileStream fs = File.OpenWrite(iconame))
                     {
-                        Icon.ExtractAssociatedIcon(file).Save(fs);
+                        Icon icon = Icon.ExtractAssociatedIcon(file);
+                        if (icon != null)
+                        {
+                            icon.ToBitmap().Save(fs, ImageFormat.Png);
+                        }
                     }
                 }
             }
         }
 
+        #endregion
+
+        [DataContract]
+        private class BrowsePath
+        {
+            #region Properties
+
+            [DataMember(Name = "isError", Order = 2)]
+            public bool IsError { get; set; }
+
+            [DataMember(Name = "isFolder", Order = 1)]
+            public bool IsFolder { get; set; }
+
+            [DataMember(Name = "name", Order = 0)]
+            public string Name { get; set; }
+
+            #endregion
+        }
     }
 }
