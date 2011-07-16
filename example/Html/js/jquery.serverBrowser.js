@@ -1,10 +1,39 @@
-﻿/*
-    author: ApmeM (artem.votincev@gmail.com)
-    date: 16-Jul-2011
-    version: 1.6
-    download: http://code.google.com/p/jq-serverbrowse/
-    copyiright (c) 2010 Artem Votincev (apmem.org)
-*/
+﻿/**
+ * Extension for jQuery for browse server files and 
+ * folders. Required server side code.
+ * Created by Artem Votincev (apmem.org)
+ * Copyiright (c) 2011 Artem Votincev (apmem.org)
+ * Distributed under BSD license
+ *
+ * @requires jquery.js, jquery-ui.js
+ * @version 1.6 
+ * @author artem
+ * @download http://code.google.com/p/jq-serverbrowse/
+ * @usage 
+ * $('#Button1').serverBrowser({
+ *     onSelect: function(path) {
+ *         $('#TextBox1').val(path);
+ *     },
+ *     onLoad: function() {
+ *         return $('#TextBox1').val();
+ *     },
+ *     imageUrl: 'img/icons/',
+ *     systemImageUrl: 'img/browser/',
+ *     handlerUrl: 'getpath.txt',
+ *     title: 'Browse1',
+ *     basePath: '',
+ *     requestMethod: 'GET'
+ * });
+ * 
+ * WARNING:
+ * - IE9 have a bug - it will not display image if server response 
+ * contain content-type: image/png, file have a *.png extension
+ * and file inner type is not png.
+ * Other browsers display such images correctly.
+ * - IE9 have a bug - it will not work with old jquery-ui library
+ * please update jquery and jquery-ui to latest versions if moving
+ * and resizing do not work correctly.
+ */
 
 (function($) {
     $.fn.serverBrowser = function(settings) {
