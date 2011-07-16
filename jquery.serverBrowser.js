@@ -52,7 +52,7 @@
 
 // Administrative parameters used to
 // help programmer or system administrator
-                requestMethod: 'POST',
+                requestMethod: 'POST'
             };
 
             if (settings) $.extend(config, settings);
@@ -74,7 +74,7 @@
                 },
                 resize: function(event, ui) {
                     recalculateSize(event, ui);
-                },
+                }
             });
             
             function systemImageUrl()
@@ -96,7 +96,7 @@
 // When user select element, it will add associated path into this array
 // When user deselect element - associated path will be removed
 // Exception: if 'config.multiselect' is false, only one element will be stored in this array.
-                selectedItems: [],
+                selectedItems: []
             }
             
 // Main dialog div
