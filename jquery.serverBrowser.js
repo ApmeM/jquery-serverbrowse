@@ -1,7 +1,7 @@
 ﻿/*
     author: ApmeM (artem.votincev@gmail.com)
-    date: 9-June-2010
-    version: 1.4
+    date: 16-Jul-2011
+    version: 1.6
     download: http://code.google.com/p/jq-serverbrowse/
 */
 
