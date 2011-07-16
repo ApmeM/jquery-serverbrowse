@@ -70,7 +70,7 @@
                     },
                     "Open": function() {
                         doneOk();
-                    },
+                    }
                 },
                 resize: function(event, ui) {
                     recalculateSize(event, ui);
