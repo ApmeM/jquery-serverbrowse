@@ -1,0 +1,30 @@
+{
+  "name": "@apmem/jquery-serverbrowse",
+  "version": "1.0.0",
+  "description": "Plugin for jQuery that allow to browse server files, or show other tree-based information in dialog window.",
+  "main": "jquery.serverBrowser.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": "https://github.com/ApmeM/jquery-serverbrowse.git",
+  "keywords": [
+    "jquery",
+    "log"
+  ],
+  "author": "ApmeM",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ApmeM/jquery-serverbrowse/issues"
+  },
+  "homepage": "https://github.com/ApmeM/jquery-serverbrowse#readme",
+  "dependencies": {
+    "jquery": "^3.6.1",
+    "jquery-ui": "^1.13.2"
+  },
+  "publishConfig": {
+    "apmem:registry": "https://npm.pkg.github.com"
+  }
+}

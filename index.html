@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>jquery-serverBrowser example</title>
+    <script src="node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="node_modules/jquery-ui/dist/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="jquery.serverBrowser.js" type="text/javascript"></script>
+    <link href="node_modules/jquery-ui/dist/themes/base/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function() {
+            $('#Button1').serverBrowser({
+                onSelect: function(path) {
+                    $('#TextBox1').val(path);
+                },
+                onLoad: function() {
+                    return $('#TextBox1').val();
+                },
+                imageUrl: 'img/icons/',
+                systemImageUrl: 'img/browser/',
+                handlerUrl: 'getpath.txt',
+                title: 'Browse1',
+                basePath: '',
+                requestMethod: 'GET'
+            });
+        });
+        
+    </script>
+</head>
+<body>
+    <div>
+        <input id="TextBox1" style="width: 500px" />
+        <input id="Button1" type="button" class="ui-corner-all ui-state-default" value="Select" />
+    </div>
+</body>
+</html>

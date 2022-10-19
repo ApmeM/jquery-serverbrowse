@@ -3,12 +3,12 @@
  * folders. Required server side code.
  * Created by Artem Votincev (apmem.org)
  * Copyiright (c) 2011 Artem Votincev (apmem.org)
- * Distributed under BSD license
+ * Distributed under MIT license
  *
  * @requires jquery.js, jquery-ui.js
  * @version 1.6 
  * @author artem
- * @download http://code.google.com/p/jq-serverbrowse/
+ * @download https://github.com/ApmeM/jquery-serverbrowse
  * @usage 
  * $('#Button1').serverBrowser({
  *     onSelect: function(path) {
